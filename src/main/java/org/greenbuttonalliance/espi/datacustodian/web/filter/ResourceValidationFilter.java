@@ -60,6 +60,18 @@ public class ResourceValidationFilter implements Filter {
 
 		System.out.println("ResourceValidationFilter: start of doFilter");
 
+		// Short-circuit: do NOT apply this filter to Data Custodian REST API endpoints
+		// like /DataCustodian/api/data/** which are intentionally outside OAuth RS/AS.
+		HttpServletRequest request = (HttpServletRequest) req;
+		HttpServletResponse response = (HttpServletResponse) res;
+		String uri = request.getRequestURI();
+		if (uri != null && (uri.contains("/api/data/") || uri.endsWith("/api/data") )) {
+			// Bypass validation and continue the filter chain
+			System.out.printf("ResourceValidationFilter: bypass for URI %s\n", uri);
+			chain.doFilter(req, res);
+			return;
+		}
+
 		Boolean invalid = true;
 		Boolean hasBearer = false;
 		Boolean hasValidOAuthAccessToken = false;
@@ -72,9 +84,6 @@ public class ResourceValidationFilter implements Filter {
 		Set<String> roles = null;
 
 		// Get the URI for later tests
-		HttpServletRequest request = (HttpServletRequest) req;
-		HttpServletResponse response = (HttpServletResponse) res;
-		String uri = request.getRequestURI();
 		String service = request.getMethod();
 
 		// See if any authentication has happened

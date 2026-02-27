@@ -43,11 +43,11 @@ import static org.junit.Assert.*;
 public class RetailCustomerSteps {
 
 	String xmlResult;
-	private WebDriver driver = WebDriverSingleton.getInstance();
+	private WebDriver driver = org.greenbuttonalliance.espi.common.support.WebDriverSingleton.getInstance();
 
 	@Before
 	public static void before() {
-		TestUtils.setupXMLUnit();
+		org.greenbuttonalliance.espi.datacustodian.support.TestUtils.setupXMLUnit();
 	}
 
 	@Given("^Alan Turing is a Retail Customer$")
@@ -208,14 +208,14 @@ public class RetailCustomerSteps {
 
 	@Given("^a Retail Customer$")
 	public void a_Retail_Customer() throws Throwable {
-		CucumberSession.setUsername(newUsername());
-		StepUtils.registerUser(CucumberSession.getUsername(), newFirstName(),
+		org.greenbuttonalliance.espi.common.support.CucumberSession.setUsername(newUsername());
+		StepUtils.registerUser(org.greenbuttonalliance.espi.common.support.CucumberSession.getUsername(), newFirstName(),
 				newLastName(), StepUtils.PASSWORD);
 	}
 
 	@When("^I log in as Retail Customer$")
 	public void I_log_in_as() throws Throwable {
-		StepUtils.login(CucumberSession.getUsername(), StepUtils.PASSWORD);
+		StepUtils.login(org.greenbuttonalliance.espi.common.support.CucumberSession.getUsername(), StepUtils.PASSWORD);
 	}
 
 	@Then("^I should see a Select Third Party link$")

@@ -35,11 +35,11 @@ import static org.greenbuttonalliance.espi.common.test.Asserts.assertXpathValue;
 
 public class UsagePointSteps {
 
-	private WebDriver driver = WebDriverSingleton.getInstance();
+	private WebDriver driver = org.greenbuttonalliance.espi.common.support.WebDriverSingleton.getInstance();
 
 	@Before
 	public void setup() {
-		TestUtils.setupXMLUnit();
+		org.greenbuttonalliance.espi.datacustodian.support.TestUtils.setupXMLUnit();
 	}
 
 	@Given("^I am a Third Party$")

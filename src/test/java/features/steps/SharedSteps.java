@@ -21,7 +21,6 @@
 package features.steps;
 
 
-import org.greenbuttonalliance.espi.common.test.WebDriverSingleton;
 import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -33,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 
 public class SharedSteps {
 
-	private static WebDriver driver = WebDriverSingleton.getInstance();
+	private static WebDriver driver = org.greenbuttonalliance.espi.common.support.WebDriverSingleton.getInstance();
 
 	@Ignore
 	static void assertMeterReading() {

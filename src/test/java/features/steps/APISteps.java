@@ -38,7 +38,7 @@ import java.io.IOException;
 import static features.steps.StepUtils.assertContains;
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 import static org.greenbuttonalliance.espi.common.test.BaseStepUtils.clickLinkByText;
-import static org.greenbuttonalliance.espi.common.test.TestUtils.getXPathValue;
+import static org.greenbuttonalliance.espi.common.support.TestUtils.getXPathValue;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 

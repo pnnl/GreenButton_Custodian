@@ -1,0 +1,11 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Fri Jan 03 10:44:12 PST 2025
+https\://oss.sonatype.org/content/repositories/snapshots/.error=
+https\://oss.sonatype.org/content/repositories/releases/.lastUpdated=1735929852013
+http\://maven.springframework.org/snapshot/.error=Could not transfer artifact org.apache\:apache\:pom\:4 from/to spring-maven-snapshot (http\://maven.springframework.org/snapshot)\: maven.springframework.org
+http\://maven.springframework.org/release/.error=Could not transfer artifact org.apache\:apache\:pom\:4 from/to spring-maven-release (http\://maven.springframework.org/release)\: maven.springframework.org
+@default-spring-maven-milestone-http\://maven.springframework.org/milestone/.lastUpdated=1735929851672
+https\://oss.sonatype.org/content/repositories/snapshots/.lastUpdated=1735929851818
+@default-spring-maven-snapshot-http\://maven.springframework.org/snapshot/.lastUpdated=1735929851675
+http\://maven.springframework.org/milestone/.error=Could not transfer artifact org.apache\:apache\:pom\:4 from/to spring-maven-milestone (http\://maven.springframework.org/milestone)\: maven.springframework.org
+@default-spring-maven-release-http\://maven.springframework.org/release/.lastUpdated=1735929851669

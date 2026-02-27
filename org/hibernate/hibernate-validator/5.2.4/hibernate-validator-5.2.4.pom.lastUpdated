@@ -1,0 +1,14 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Wed Jan 29 09:25:15 PST 2025
+http\://maven.springframework.org/release/.error=Could not transfer artifact org.hibernate\:hibernate-validator\:pom\:5.2.4 from/to spring-maven-release (http\://maven.springframework.org/release)\: maven.springframework.org\: No address associated with hostname
+https\://oss.sonatype.org/content/repositories/snapshots/.error=
+https\://oss.sonatype.org/content/repositories/releases/.lastUpdated=1738171515235
+http\://maven.springframework.org/snapshot/.error=Could not transfer artifact org.hibernate\:hibernate-validator\:pom\:5.2.4 from/to spring-maven-snapshot (http\://maven.springframework.org/snapshot)\: maven.springframework.org
+http\://maven.springframework.org/milestone/.error=Could not transfer artifact org.hibernate\:hibernate-validator\:pom\:5.2.4 from/to spring-maven-milestone (http\://maven.springframework.org/milestone)\: maven.springframework.org
+@default-spring-maven-snapshot-http\://maven.springframework.org/snapshot/.lastUpdated=1738171514736
+https\://oss.sonatype.org/content/repositories/snapshots/.lastUpdated=1738171515041
+https\://oss.sonatype.org/content/repositories/releases/.error=
+https\://repo.maven.apache.org/maven2/.lastUpdated=1738171515365
+https\://repo.maven.apache.org/maven2/.error=
+@default-spring-maven-milestone-http\://maven.springframework.org/milestone/.lastUpdated=1738171514733
+@default-spring-maven-release-http\://maven.springframework.org/release/.lastUpdated=1738171514729

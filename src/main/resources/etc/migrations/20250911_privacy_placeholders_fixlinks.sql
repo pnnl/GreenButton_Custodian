@@ -1,0 +1,3 @@
+-- Optional fixlinks script; keep empty but valid.
+-- Exists to satisfy ResourceDatabasePopulator include.
+-- No-ops for now.

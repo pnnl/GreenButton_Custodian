@@ -49,7 +49,7 @@
 
     <c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/>
 
-    <authz:authorize ifAllGranted="ROLE_USER">
+    <authz:authorize access="hasRole('ROLE_USER')">
 
         <h2>Please Confirm</h2>
 
@@ -62,6 +62,18 @@
         			<li>${scope.key}: <input type="radio" name="${scope.key}" value="true"${approved}> Approve  </input><input type="radio" name="${scope.key}" value="false"${denied}> Deny</input></li> 
         		</c:forEach>            
             </ul>
+            
+            <!-- Privacy Level Selection -->
+            <div style="margin-top: 20px; margin-bottom: 20px;">
+                <label for="privacyLevel">Select Privacy Level:</label>
+                <select name="privacy_level" id="privacyLevel" style="margin-left: 10px; padding: 5px;">
+                    <option value="full">Full Access</option>
+                    <option value="high">High Privacy</option>
+                    <option value="medium">Medium Privacy</option>
+                    <option value="low">Low Privacy</option>
+                </select>
+            </div>
+            
             <label>
                 <input name="authorize" value="Submit" type="submit" class="btn btn-primary">
             </label>

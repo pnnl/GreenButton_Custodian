@@ -34,6 +34,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.Arrays;
 
 /**
  * Controller for retrieving the model for and displaying the confirmation page for access to a protected resource.
@@ -65,6 +67,11 @@ public class AccessConfirmationController {
 			}
 		}
 		model.put("scopes", scopes);
+		
+		// Add available privacy levels for the dropdown
+		List<String> privacyLevels = Arrays.asList("full", "high", "medium", "low");
+		model.put("privacyLevels", privacyLevels);
+		
 		return new ModelAndView("access_confirmation", model);
 	}
 

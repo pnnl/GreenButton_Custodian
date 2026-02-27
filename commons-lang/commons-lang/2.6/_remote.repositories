@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue Dec 31 12:21:59 PST 2024
+commons-lang-2.6.jar>central=
+commons-lang-2.6.jar>greenbuttonalliance-release=
+commons-lang-2.6.pom>greenbuttonalliance-release=

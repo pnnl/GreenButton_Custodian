@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue Dec 31 12:21:59 PST 2024
+antlr-2.7.7.jar>central=
+antlr-2.7.7.jar>greenbuttonalliance-release=
+antlr-2.7.7.pom>greenbuttonalliance-release=

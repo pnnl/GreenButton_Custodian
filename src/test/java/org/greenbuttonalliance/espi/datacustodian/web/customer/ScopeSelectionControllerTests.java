@@ -35,7 +35,7 @@ public class ScopeSelectionControllerTests {
 	public void scopeSelection() throws Exception {
 		ScopeSelectionController controller = new ScopeSelectionController();
 
-		ApplicationInformation applicationInformation = EspiFactory
+		ApplicationInformation applicationInformation = org.greenbuttonalliance.espi.datacustodian.utils.factories.EspiFactory
 				.newApplicationInformation();
 		applicationInformation
 				.setThirdPartyScopeSelectionScreenURI("http://localhost:8080/ThirdParty/RetailCustomer/ScopeSelection");

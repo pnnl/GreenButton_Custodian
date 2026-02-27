@@ -1,0 +1,7 @@
+# Memory optimization for large exports
+-Xms1g
+-Xmx4g
+-XX:+UseG1GC
+-XX:MaxGCPauseMillis=200
+-Dspring.jpa.properties.hibernate.jdbc.batch_size=100
+-Dspring.jpa.properties.hibernate.jdbc.fetch_size=500

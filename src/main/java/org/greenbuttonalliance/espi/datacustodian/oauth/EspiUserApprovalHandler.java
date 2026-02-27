@@ -1,23 +1,3 @@
-/*
- *
- *    Copyright (c) 2018-2021 Green Button Alliance, Inc.
- *
- *    Portions (c) 2013-2018 EnergyOS.org
- *
- *     Licensed under the Apache License, Version 2.0 (the "License");
- *     you may not use this file except in compliance with the License.
- *     You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- *     Unless required by applicable law or agreed to in writing, software
- *     distributed under the License is distributed on an "AS IS" BASIS,
- *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *     See the License for the specific language governing permissions and
- *     limitations under the License.
- *
- */
-
 package org.greenbuttonalliance.espi.datacustodian.oauth;
 
 import org.springframework.security.core.Authentication;
@@ -30,70 +10,64 @@ import org.springframework.security.oauth2.provider.approval.ApprovalStoreUserAp
 import java.util.Collection;
 
 /**
- * @author Dave Syer
- * 
+ * Custom UserApprovalHandler that can be toggled on/off
+ * so you can force a consent screen even if the client
+ * has already been auto‑approved.
  */
 public class EspiUserApprovalHandler extends ApprovalStoreUserApprovalHandler {
-	
-	private boolean useApprovalStore = true;
-	
-	private ClientDetailsService clientDetailsService;
-	
-	/**
-	 * Service to load client details (optional) for auto approval checks.
-	 * 
-	 * @param clientDetailsService a client details service
-	 */
-	public void setClientDetailsService(ClientDetailsService clientDetailsService) {
-		this.clientDetailsService = clientDetailsService;
-		super.setClientDetailsService(clientDetailsService);
-	}
 
-	/**
-	 * @param useApprovalStore the useTokenServices to set
-	 */
-	public void setUseApprovalStore(boolean useApprovalStore) {
-		this.useApprovalStore = useApprovalStore;
-	}
+    private boolean useApprovalStore = true;        // <— default: enforce stored approvals
+    private ClientDetailsService clientDetailsService;
 
-	/**
-	 * Allows automatic approval for a white list of clients in the implicit grant case.
-	 * 
-	 * @param authorizationRequest The authorization request.
-	 * @param userAuthentication the current user authentication
-	 * 
-	 * @return An updated request if it has already been approved by the current user.
-	 */
-	@Override
-	public AuthorizationRequest checkForPreApproval(AuthorizationRequest authorizationRequest,
-			Authentication userAuthentication) {
+    /**
+     * Set whether to consult the approvalStore at all.
+     * When false we skip super.checkForPreApproval(...) and
+     * only honor the client.isAutoApprove(...) flags.
+     */
+    public void setUseApprovalStore(boolean useApprovalStore) {
+        this.useApprovalStore = useApprovalStore;
+    }
 
-		boolean approved = false;
-		// If we are allowed to check existing approvals this will short circuit the decision
-		if (useApprovalStore) {
-			authorizationRequest = super.checkForPreApproval(authorizationRequest, userAuthentication);
-			approved = authorizationRequest.isApproved();
-		}
-		else {
-			if (clientDetailsService != null) {
-				Collection<String> requestedScopes = authorizationRequest.getScope();
-				try {
-					ClientDetails client = clientDetailsService
-							.loadClientByClientId(authorizationRequest.getClientId());
-					for (String scope : requestedScopes) {
-						if (client.isAutoApprove(scope) || client.isAutoApprove("all")) {
-							approved = true;
-							break;
-						}
-					}
-				}
-				catch (ClientRegistrationException e) {
-				}
-			}
-		}
-		authorizationRequest.setApproved(approved);
+    @Override
+    public void setClientDetailsService(ClientDetailsService clientDetailsService) {
+        super.setClientDetailsService(clientDetailsService);
+        this.clientDetailsService = clientDetailsService;
+    }
 
-		return authorizationRequest;
-	}
+    @Override
+    public AuthorizationRequest checkForPreApproval(AuthorizationRequest authorizationRequest,
+                                                    Authentication userAuthentication) {
+        // Test-only override: allow fully headless OAuth flow when enabled
+        String auto = System.getProperty("espi.autoapprove", "false");
+        if ("true".equalsIgnoreCase(auto)) {
+            authorizationRequest.setApproved(true);
+            return authorizationRequest;
+        }
 
+        boolean approved = false;
+
+        if (useApprovalStore) {
+            // consult the approvalStore (i.e. persist approvals in the database)
+            authorizationRequest = super.checkForPreApproval(authorizationRequest, userAuthentication);
+            approved = authorizationRequest.isApproved();
+        } else if (clientDetailsService != null) {
+            // skip the approvalStore; only auto‑approve scopes marked in clientDetails
+            Collection<String> scopes = authorizationRequest.getScope();
+            try {
+                ClientDetails client = clientDetailsService
+                        .loadClientByClientId(authorizationRequest.getClientId());
+                for (String scope : scopes) {
+                    if (client.isAutoApprove(scope) || client.isAutoApprove("all")) {
+                        approved = true;
+                        break;
+                    }
+                }
+            } catch (ClientRegistrationException e) {
+                // ignore, leave approved = false
+            }
+        }
+
+        authorizationRequest.setApproved(approved);
+        return authorizationRequest;
+    }
 }

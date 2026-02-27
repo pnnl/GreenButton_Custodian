@@ -149,7 +149,7 @@ public class TestUtils {
 			UsagePointService usagePointService, RetailCustomer customer,
 			UUID uuid) throws JAXBException, IOException,
 			ParserConfigurationException, SAXException {
-		importService.importData(FixtureFactory.newFeedInputStream(uuid), null);
+		importService.importData(org.greenbuttonalliance.espi.datacustodian.utils.factories.FixtureFactory.newFeedInputStream(uuid), null);
 		usagePointService.associateByUUID(customer, uuid);
 	}
 
@@ -166,4 +166,9 @@ public class TestUtils {
 	public static void assertFieldNotMarshallable(Class clazz, String field) {
 		assertAnnotationPresent(clazz, field, XmlTransient.class);
 	}
+
+    public static void setupXMLUnit() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setupXMLUnit'");
+    }
 }

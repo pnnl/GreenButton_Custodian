@@ -31,15 +31,39 @@ import java.security.Principal;
 @Controller
 public class DefaultController extends BaseController {
 
-	@RequestMapping(Routes.DEFAULT)
-	public String defaultAfterLogin(HttpServletRequest request,
-			Principal principal) {
-		if (request.isUserInRole(RetailCustomer.ROLE_CUSTODIAN)) {
-			return "redirect:/custodian/home";
-		} else if (request.isUserInRole(RetailCustomer.ROLE_USER)) {
-			return "redirect:/RetailCustomer/"
-					+ currentCustomer(principal).getId() + "/home";
-		}
-		return "redirect:/home";
-	}
+    @RequestMapping(Routes.DEFAULT)
+    public String defaultAfterLogin(HttpServletRequest request, Principal principal) {
+        // Check if user is in the Custodian role
+        if (request.isUserInRole(RetailCustomer.ROLE_CUSTODIAN)) {
+            return "redirect:/custodian/home";
+        }
+        
+        // Check if user is in the RetailCustomer role
+        else if (request.isUserInRole(RetailCustomer.ROLE_USER)) {
+            // Null check for Principal
+            if (principal == null) {
+                System.err.println("Error: Principal is null. Redirecting to /home.");
+                return "redirect:/home";
+            }
+
+            // Attempt to get the current customer
+            RetailCustomer customer = currentCustomer(principal);
+            if (customer == null) {
+                System.err.println("Error: currentCustomer() returned null for principal: " + principal.getName());
+                return "redirect:/home";
+            }
+
+            // Check if customer ID is null
+            if (customer.getId() == null) {
+                System.err.println("Error: Customer ID is null for customer: " + customer);
+                return "redirect:/home";
+            }
+
+            // Redirect to the RetailCustomer home
+            return "redirect:/RetailCustomer/" + customer.getId() + "/home";
+        }
+
+        // Default fallback redirect
+        return "redirect:/home";
+    }
 }

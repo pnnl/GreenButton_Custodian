@@ -25,7 +25,7 @@
     <localRepository/>
     <interactiveMode/>
     <usePluginRegistry/>
-    <offline/>
+      <offline>false</offline>
     <pluginGroups/>
     <servers>
         <server>

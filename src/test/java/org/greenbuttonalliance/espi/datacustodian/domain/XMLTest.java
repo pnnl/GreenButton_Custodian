@@ -28,6 +28,6 @@ public class XMLTest extends BaseTest {
 
 	@BeforeClass
 	public static void beforeClass() {
-		TestUtils.setupXMLUnit();
+		org.greenbuttonalliance.espi.datacustodian.support.TestUtils.setupXMLUnit();
 	}
 }

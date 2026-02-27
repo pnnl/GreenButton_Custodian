@@ -28,7 +28,7 @@ import org.greenbuttonalliance.espi.common.service.ExportService;
 import org.greenbuttonalliance.espi.common.service.ImportService;
 import org.greenbuttonalliance.espi.common.service.RetailCustomerService;
 import org.greenbuttonalliance.espi.common.service.UsagePointService;
-import org.greenbuttonalliance.espi.common.test.FixtureFactory;
+import org.greenbuttonalliance.espi.common.support.FixtureFactory;
 import org.greenbuttonalliance.espi.common.utils.ExportFilter;
 import org.greenbuttonalliance.espi.datacustodian.utils.factories.EspiFactory;
 import org.junit.Ignore;
@@ -75,7 +75,7 @@ public class IntegrationSteps {
 		usagePointService.createOrReplaceByUUID(usagePoint);
 
 		importService.importData(
-				FixtureFactory.newFeedInputStream(UUID.randomUUID()), null);
+				org.greenbuttonalliance.espi.datacustodian.utils.factories.FixtureFactory.newFeedInputStream(UUID.randomUUID()), null);
 	}
 
 	@When("^I export Usage Point$")

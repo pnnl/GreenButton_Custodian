@@ -1,0 +1,11 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue Dec 31 12:20:57 PST 2024
+@default-spring-maven-milestone-http\://maven.springframework.org/milestone/.lastUpdated=1735676457517
+@default-spring-maven-release-http\://maven.springframework.org/release/.lastUpdated=1735676457511
+@default-spring-maven-snapshot-http\://maven.springframework.org/snapshot/.lastUpdated=1735676457519
+http\://maven.springframework.org/milestone/.error=Could not transfer artifact commons-codec\:commons-codec\:pom\:1.7 from/to spring-maven-milestone (http\://maven.springframework.org/milestone)\: maven.springframework.org
+http\://maven.springframework.org/release/.error=Could not transfer artifact commons-codec\:commons-codec\:pom\:1.7 from/to spring-maven-release (http\://maven.springframework.org/release)\: maven.springframework.org
+http\://maven.springframework.org/snapshot/.error=Could not transfer artifact commons-codec\:commons-codec\:pom\:1.7 from/to spring-maven-snapshot (http\://maven.springframework.org/snapshot)\: maven.springframework.org
+https\://oss.sonatype.org/content/repositories/releases/.lastUpdated=1735676457898
+https\://oss.sonatype.org/content/repositories/snapshots/.error=
+https\://oss.sonatype.org/content/repositories/snapshots/.lastUpdated=1735676457620

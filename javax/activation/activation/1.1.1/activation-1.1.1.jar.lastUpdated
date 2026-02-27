@@ -1,0 +1,11 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 20 10:36:00 PST 2025
+https\://oss.sonatype.org/content/repositories/snapshots/.error=
+https\://oss.sonatype.org/content/repositories/releases/.lastUpdated=1737398160983
+http\://maven.springframework.org/snapshot/.error=Could not transfer artifact javax.activation\:activation\:jar\:1.1.1 from/to spring-maven-snapshot (http\://maven.springframework.org/snapshot)\: maven.springframework.org
+http\://maven.springframework.org/release/.error=Could not transfer artifact javax.activation\:activation\:jar\:1.1.1 from/to spring-maven-release (http\://maven.springframework.org/release)\: maven.springframework.org
+@default-spring-maven-milestone-http\://maven.springframework.org/milestone/.lastUpdated=1737398160535
+https\://oss.sonatype.org/content/repositories/snapshots/.lastUpdated=1737398160720
+@default-spring-maven-snapshot-http\://maven.springframework.org/snapshot/.lastUpdated=1737398160545
+http\://maven.springframework.org/milestone/.error=Could not transfer artifact javax.activation\:activation\:jar\:1.1.1 from/to spring-maven-milestone (http\://maven.springframework.org/milestone)\: maven.springframework.org
+@default-spring-maven-release-http\://maven.springframework.org/release/.lastUpdated=1737398160512

@@ -32,6 +32,7 @@ import org.springframework.security.oauth2.common.exceptions.InvalidGrantExcepti
 import org.springframework.security.oauth2.common.util.OAuth2Utils;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
@@ -54,10 +55,10 @@ public class EspiTokenEnhancer implements TokenEnhancer {
 	@Autowired
 	private RetailCustomerService retailCustomerService;
 
-	@Transactional(rollbackFor = { javax.xml.bind.JAXBException.class }, noRollbackFor = {
-			javax.persistence.NoResultException.class,
-			org.springframework.dao.EmptyResultDataAccessException.class })
+	
 	@Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken,
 			OAuth2Authentication authentication) {
 
@@ -248,6 +249,33 @@ public class EspiTokenEnhancer implements TokenEnhancer {
 			} catch (NoResultException | EmptyResultDataAccessException e) {
 				// No, process as initial access token request
 
+				// Extract privacy level from request parameters before creating subscription
+				String privacyLevel = null;
+				Map<String, String> requestParams = authentication.getOAuth2Request().getRequestParameters();
+				System.out.println("EspiTokenEnhancer: Request params for subscription creation: " + requestParams);
+				
+				// Look for scope.privacy:level=true parameters first
+				for (String key : requestParams.keySet()) {
+					if (key.startsWith("scope.privacy:") && "true".equals(requestParams.get(key))) {
+						privacyLevel = key.substring("scope.privacy:".length());
+						System.out.println("EspiTokenEnhancer: Found privacy level in scope param: " + privacyLevel);
+						break;
+					}
+				}
+				
+				// Fallback: check if privacy level is passed as a separate parameter
+				if (privacyLevel == null && requestParams.containsKey("privacy_level")) {
+					privacyLevel = requestParams.get("privacy_level");
+					System.out.println("EspiTokenEnhancer: Found privacy level in privacy_level param: " + privacyLevel);
+				}
+				
+				System.out.println("EspiTokenEnhancer: Final privacy level for subscription: " + privacyLevel);
+				
+				// Store privacy level in OAuth request for subscription service to use
+				if (privacyLevel != null) {
+					authentication.getOAuth2Request().getRequestParameters().put("espi_privacy_level", privacyLevel);
+				}
+
 				// Create Subscription and add resourceURI to /oath/token
 				// response
 				Subscription subscription = subscriptionService
@@ -289,7 +317,7 @@ public class EspiTokenEnhancer implements TokenEnhancer {
 					UsagePoint up = resourceService.findById(it.next(),
 							UsagePoint.class);
 					up.setSubscription(subscription);
-					resourceService.persist(up); // maybe not needed??
+					resourceService.merge(up); 
 				}
 
 				// Update Data Custodian authorization structure

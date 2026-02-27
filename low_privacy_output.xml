@@ -1,0 +1,39 @@
+[1] Initiating OAuth flow...
+Authorization URL: http://localhost:8080/DataCustodian/oauth/authorize?response_type=code&client_id=third_party&redirect_uri=http://localhost:8080/ThirdParty/espi/1_1/OAuthCallBack&state=teststate-1757661298&scope=privacy:low
+[2] Simulating user login (capturing JSESSIONID cookie)...
+Login response: HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+Set-Cookie: JSESSIONID=32E1782A8968496929BA6E06D369BA50; Path=/DataCustodian; HttpOnly
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Content-Type: application/json;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Fri, 12 Sep 2025 07:14:58 GMT
+
+{"user":{"id":1,"username":"alan"},"message":"Authentication successful","success":true}
+[3] Getting authorization URL from proxy and visiting it as logged-in user...
+Authorization URL (to load consent form): http://localhost:8080/DataCustodian/oauth/authorize?client_id=third_party&response_type=code&redirect_uri=http://localhost:8080/ThirdParty/espi/1_1/OAuthCallBack&scope=privacy:low&state=teststate-1757661298
+[3.1] Attempting auto-approve by inspecting redirect (no follow)...
+Auto-approve callback URL: http://localhost:8080/ThirdParty/espi/1_1/OAuthCallBack?code=txNFIk&state=teststate-1757661298
+[4] Submitting consent (user_oauth_approval=true)...
+Callback URL: http://localhost:8080/ThirdParty/espi/1_1/OAuthCallBack?code=txNFIk&state=teststate-1757661298
+Extracted authorization code: txNFIk
+[5] Exchanging code for access token via proxy...
+Token response: {"access_token":"A3SC8lfl_---Su2LDxKl8rRVNXc","token_type":"bearer","refresh_token":"t6X2dqvGIPLOfttd6cgFhG4ANbk","expires_in":315359997,"scope":"privacy:low","resourceURI":"http://localhost:8080/DataCustodian/espi/1_1/resource/Batch/Subscription/5","authorizationURI":"http://localhost:8080/DataCustodian/espi/1_1/resource/Authorization/5"}
+RESOURCE_URI: 
+[6] Fetching user XML data...
+FETCH_URL set to: http://localhost:8080/DataCustodian/espi/1_1/resource/Batch/Subscription/5
+User XML data:
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="GreenButtonDataStyleSheet.xslt"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<id>urn:uuid:e4b64758-ddd1-4263-b360-bdf0ad684d9e</id>
+<link href="https://cert.greenbuttonalliance.org/certificate/776198e6-59ec-5d25-950a-b34a25b93d67" rel="related"/>
+<title>Green Button Usage Feed</title>
+<updated>2025-09-12T07:15:04Z</updated>
+<link href="http://localhost:8080/DataCustodian/espi/1_1/resource/Batch/Subscription/5" rel="self"/></feed>
+\nOAuth proxy test complete.

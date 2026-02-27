@@ -40,7 +40,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class StepUtils extends BaseStepUtils {
+public class StepUtils extends org.greenbuttonalliance.espi.common.support.BaseStepUtils {
 	public static void navigateTo(String path) {
 		driver.get(StepUtils.DATA_CUSTODIAN_BASE_URL + path);
 	}
@@ -114,7 +114,7 @@ public class StepUtils extends BaseStepUtils {
 		matcher.find();
 		String hashedId = matcher.group(1);
 		assertNotNull(hashedId);
-		CucumberSession.setUserHashedId(hashedId);
+		org.greenbuttonalliance.espi.common.support.CucumberSession.setUserHashedId(hashedId);
 	}
 
 	public static void associate(String uuid, String description) {
@@ -133,7 +133,7 @@ public class StepUtils extends BaseStepUtils {
 	}
 
 	public static void uploadUsagePoints(UUID uuid) throws IOException {
-		String xml = FixtureFactory.newFeedXML(uuid);
+		String xml = org.greenbuttonalliance.espi.datacustodian.utils.factories.FixtureFactory.newFeedXML(uuid);
 		File tmpFile = File.createTempFile("usage_point", ".xml");
 		Files.copy(new ByteArrayInputStream(xml.getBytes()),
 				Paths.get(tmpFile.getAbsolutePath()), REPLACE_EXISTING);

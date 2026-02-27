@@ -1,70 +1,94 @@
-/*
- *
- *    Copyright (c) 2018-2021 Green Button Alliance, Inc.
- *
- *    Portions (c) 2013-2018 EnergyOS.org
- *
- *     Licensed under the Apache License, Version 2.0 (the "License");
- *     you may not use this file except in compliance with the License.
- *     You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- *     Unless required by applicable law or agreed to in writing, software
- *     distributed under the License is distributed on an "AS IS" BASIS,
- *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *     See the License for the specific language governing permissions and
- *     limitations under the License.
- *
- */
-
 package org.greenbuttonalliance.espi.datacustodian.console;
 
-import org.apache.http.HttpVersion;
-import org.apache.http.client.HttpClient;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ImportUsagePoint {
+    // This matches the DataCustodian controller: POST /custodian/upload
+    private static final String UPLOAD_PATH = "/custodian/upload";
 
-    public static void upload(String filename, String url, HttpClient client) throws IOException {
-        HttpPost post = new HttpPost(url);
-        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+    public static void upload(File file, String baseUrl) throws IOException {
+        // build target URL (strip any trailing slash from baseUrl)
+        String cleanBase = baseUrl.endsWith("/") 
+            ? baseUrl.substring(0, baseUrl.length() - 1) 
+            : baseUrl;
+        String targetUrl = cleanBase + UPLOAD_PATH;
 
-        File file = new File(filename);
-        entity.addPart("file", new FileBody(((File) file), "application/rss+xml"));
+        System.out.println("=== ImportUsagePoint ===");
+        System.out.printf("Preparing to upload file: %s (%,d bytes)%n",
+                file.getAbsolutePath(), file.length());
+        System.out.printf("Target URL: %s%n", targetUrl);
 
-        post.setEntity(entity);
+        // build multipart request
+        FileBody fb = new FileBody(file, ContentType.create("application/rss+xml"), file.getName());
+        HttpEntity multipart = MultipartEntityBuilder.create()
+                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+                .addPart("file", fb)
+                .build();
 
-        client.execute(post);
+        HttpPost post = new HttpPost(targetUrl);
+        post.setEntity(multipart);
+
+        // send request
+        try (CloseableHttpClient client = HttpClients.createDefault();
+             CloseableHttpResponse resp = client.execute(post)) {
+
+            int status = resp.getStatusLine().getStatusCode();
+            String reason = resp.getStatusLine().getReasonPhrase();
+            System.out.printf("→ HTTP %d %s%n", status, reason);
+
+            System.out.println("Response headers:");
+            for (org.apache.http.Header h : resp.getAllHeaders()) {
+                System.out.printf("  %s: %s%n", h.getName(), h.getValue());
+            }
+
+            HttpEntity respEntity = resp.getEntity();
+            if (respEntity != null) {
+                String body = EntityUtils.toString(respEntity, "UTF-8");
+                System.out.println("Response body:");
+                System.out.println("--------------------------------");
+                System.out.println(body);
+                System.out.println("--------------------------------");
+            } else {
+                System.out.println("No response body.");
+            }
+        }
     }
 
     public static void main(String[] args) {
-        if (args.length == 2) {
-            try {
-                String filename = args[0];
-                String url = args[1];
-
-                DefaultHttpClient client = new DefaultHttpClient();
-                client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-                upload(filename, url, client);
-                client.getConnectionManager().shutdown();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Usage: import_usage_point.sh filename url");
-            System.out.println("");
-            System.out.println("Example:");
-            System.out.println("");
-            System.out.println("  import_usage_point.sh etc/usage_point.xml http://localhost:8080/custodian/retailcustomers/1/upload");
+        if (args.length != 2) {
+            System.err.println("Usage: ImportUsagePoint <filename> <baseUrl>");
+            System.err.println("  e.g. ImportUsagePoint "
+                    + "src/fixtures/test_usage_data.xml http://localhost:8080/DataCustodian");
+            System.exit(1);
         }
+
+        File file = new File(args[0]);
+        if (!file.exists() || !file.isFile()) {
+            System.err.printf("ERROR: File not found: %s%n", args[0]);
+            System.exit(2);
+        }
+
+        String baseUrl = args[1];
+        try {
+            upload(file, baseUrl);
+        } catch (IOException e) {
+            System.err.println("Upload failed: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(3);
+        }
+
+        System.out.println("ImportUsagePoint main() exiting.");
     }
 }

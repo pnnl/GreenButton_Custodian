@@ -29,9 +29,12 @@
 
     <context:property-placeholder location="classpath:spring/${database}-data-access.properties" system-properties-mode="OVERRIDE"/>
 
-    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
-          p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
-          p:username="${jdbc.username}" p:password="${jdbc.password}" 
-          p:initialSize="10" p:maxActive="20" p:maxWait="5000" p:maxIdle="5" p:minIdle="2" 
-          p:removeAbandoned="true" p:removeAbandonedTimeout="55"/>
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close"
+      p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
+      p:username="${jdbc.username}" p:password="${jdbc.password}"
+      p:initialSize="10" p:maxActive="20" p:maxWait="5000" p:maxIdle="5" p:minIdle="2"
+      p:testOnBorrow="true" p:validationQuery="SELECT 1" p:validationInterval="30000"
+      p:testWhileIdle="true" p:timeBetweenEvictionRunsMillis="30000" p:minEvictableIdleTimeMillis="60000"
+      p:removeAbandoned="true" p:removeAbandonedTimeout="600"/>
+
 </beans>

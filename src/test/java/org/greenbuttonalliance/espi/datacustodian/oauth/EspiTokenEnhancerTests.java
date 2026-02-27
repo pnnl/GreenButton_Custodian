@@ -84,7 +84,7 @@ public class EspiTokenEnhancerTests extends BaseTest {
 		authorization = new Authorization();
 		authorization.setUUID(UUID.randomUUID());
 
-		retailCustomer = EspiFactory.newRetailCustomer();
+		retailCustomer = org.greenbuttonalliance.espi.datacustodian.utils.factories.EspiFactory.newRetailCustomer();
 
 		when(subscriptionService.createSubscription(authentication))
 				.thenReturn(subscription);
