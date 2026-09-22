@@ -124,7 +124,7 @@
 	    <openespi-common.version>1.4-BUILD-PNNL</openespi-common.version>
 	    <apache-httpcomponent.version>4.5.13</apache-httpcomponent.version>
 	    <jackson1.version>1.9.13</jackson1.version>
-	    <jackson2.version>2.8.11</jackson2.version>
+	    <jackson2.version>2.18.9</jackson2.version>
 	
 	    <!-- Hibernate / JPA -->
 	    <hibernate.version>5.4.33.Final</hibernate.version>
